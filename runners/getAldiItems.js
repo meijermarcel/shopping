@@ -15,9 +15,13 @@ function getAldiItems(category_key) {
     return axios.get(url).then(async res => {
         const results = res.data.data[0].attributes.catalogSearchProductOfferResults;
         for (let result of results) {
-            const description = result.name;
+            const nameSplit = result.name.split(',');
+            const description = nameSplit[0];
             // remove $ sign
             const price = result.prices[0].formattedPrice.slice(1);
+            const contentUnit = result.contentUnit;
+            const netContent = result.netContent;
+            const imageLink = result.images[0].externalUrlLarge;
             console.log(result.name, price);
             const existingStoreItem = await StoreItem.findOne({
                 where: {
@@ -31,7 +35,10 @@ function getAldiItems(category_key) {
                 storeItemId = existingStoreItem.id;
             } else {
                 const newStoreItem = await StoreItem.create({
-                    description
+                    description,
+                    amount: netContent,
+                    units: contentUnit,
+                    imageLink
                 });
                 storeItemId = newStoreItem.id;
             }
