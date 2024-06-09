@@ -7,7 +7,8 @@
         "migrate": "./node_modules/.bin/sequelize db:migrate",
         "test": "echo \"Error: no test specified\" && exit 1",
         "prestart": "npm run migrate",
-        "start": "node index.js"
+        "start": "node index.js",
+        "postinstall": "sh postinstall.sh"
     },
     "author": "",
     "license": "ISC",
