@@ -52,11 +52,26 @@ async function getAldiItems(category_key) {
             }
 
             if (storeItemId) {
-                await StoreItemPrice.create({
-                    storeItemId,
-                    price,
-                    dateTime: dayjs().startOf('day').format()
+                const dateTime = dayjs().startOf('day').format();
+                // check if price exists for today
+                const existingStoreItemPrice = await StoreItemPrice.findOne({
+                    where: {
+                        storeItemId,
+                        dateTime
+                    }
                 });
+
+                if (existingStoreItemPrice) {
+                    // update price
+                    existingStoreItemPrice.price = price;
+                    await existingStoreItemPrice.save();
+                } else {
+                    await StoreItemPrice.create({
+                        storeItemId,
+                        price,
+                        dateTime: dayjs().startOf('day').format()
+                    });
+                }
             }
         }
     }

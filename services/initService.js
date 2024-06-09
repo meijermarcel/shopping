@@ -1,4 +1,9 @@
+const { StoreItem } = require('../models/storeItem');
+const { StoreItemPrice } = require('../models/storeItemPrice');
+
 const init = () => {
     StoreItemPrice.belongsTo(StoreItem, { foreignKey: 'storeItemId' });
-    StoreItem.hasOne(StoreItemPrice, { foreignKey: 'storeItemId', sourceKey: 'id' });
-}
+    StoreItem.hasMany(StoreItemPrice, { foreignKey: 'storeItemId', sourceKey: 'id' });
+};
+
+module.exports = { init };
