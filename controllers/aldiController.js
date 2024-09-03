@@ -3,7 +3,13 @@ const { StoreItemPrice } = require('../models/storeItemPrice');
 
 const init = (router) => {
     router.get('/aldi/items', async (req, res) => {
-        const items = await StoreItem.findAll();
+        const items = await StoreItem.findAll({
+            include: [
+                {
+                    model: StoreItemPrice
+                }
+            ]
+        });
         res.send(items);
     });
 
